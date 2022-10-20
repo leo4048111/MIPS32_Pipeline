@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wave_config>
+   <wave_state>
+   </wave_state>
+   <db_ref_list>
+      <db_ref path="tb_CPU_behav.wdb" id="1">
+         <top_modules>
+            <top_module name="glbl" />
+            <top_module name="tb_CPU" />
+         </top_modules>
+      </db_ref>
+   </db_ref_list>
+   <zoom_setting>
+      <ZoomStartTime time="0fs"></ZoomStartTime>
+      <ZoomEndTime time="198384908fs"></ZoomEndTime>
+      <Cursor1Time time="134745000fs"></Cursor1Time>
+   </zoom_setting>
+   <WVObjectSize size="17" />
+   <wvobject fp_name="/tb_CPU/clk" type="logic">
+      <obj_property name="ElementShortName">clk</obj_property>
+      <obj_property name="ObjectShortName">clk</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_CPU/uut/IM_Addr" type="array">
+      <obj_property name="ElementShortName">IM_Addr[31:0]</obj_property>
+      <obj_property name="ObjectShortName">IM_Addr[31:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_CPU/uut/IM_Inst" type="array">
+      <obj_property name="ElementShortName">IM_Inst[31:0]</obj_property>
+      <obj_property name="ObjectShortName">IM_Inst[31:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_CPU/uut/id_inst" type="array">
+      <obj_property name="ElementShortName">id_inst[31:0]</obj_property>
+      <obj_property name="ObjectShortName">id_inst[31:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_CPU/uut/ex_aluc" type="array">
+      <obj_property name="ElementShortName">ex_aluc[3:0]</obj_property>
+      <obj_property name="ObjectShortName">ex_aluc[3:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_CPU/uut/mem_wdata" type="array">
+      <obj_property name="ElementShortName">mem_wdata[31:0]</obj_property>
+      <obj_property name="ObjectShortName">mem_wdata[31:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_CPU/uut/ex_instance/aluc" type="array">
+      <obj_property name="ElementShortName">aluc[3:0]</obj_property>
+      <obj_property name="ObjectShortName">aluc[3:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_CPU/uut/ex_instance/alu_a" type="array">
+      <obj_property name="ElementShortName">alu_a[31:0]</obj_property>
+      <obj_property name="ObjectShortName">alu_a[31:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_CPU/uut/ex_instance/alu_b" type="array">
+      <obj_property name="ElementShortName">alu_b[31:0]</obj_property>
+      <obj_property name="ObjectShortName">alu_b[31:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_CPU/uut/mem_out_wdata" type="array">
+      <obj_property name="ElementShortName">mem_out_wdata[31:0]</obj_property>
+      <obj_property name="ObjectShortName">mem_out_wdata[31:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_CPU/uut/ex_out_wdata" type="array">
+      <obj_property name="ElementShortName">ex_out_wdata[31:0]</obj_property>
+      <obj_property name="ObjectShortName">ex_out_wdata[31:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_CPU/uut/mem_waddr" type="array">
+      <obj_property name="ElementShortName">mem_waddr[4:0]</obj_property>
+      <obj_property name="ObjectShortName">mem_waddr[4:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_CPU/uut/mem_rf_wena" type="logic">
+      <obj_property name="ElementShortName">mem_rf_wena</obj_property>
+      <obj_property name="ObjectShortName">mem_rf_wena</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_CPU/uut/wb_wdata" type="array">
+      <obj_property name="ElementShortName">wb_wdata[31:0]</obj_property>
+      <obj_property name="ObjectShortName">wb_wdata[31:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_CPU/uut/wb_waddr" type="array">
+      <obj_property name="ElementShortName">wb_waddr[4:0]</obj_property>
+      <obj_property name="ObjectShortName">wb_waddr[4:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_CPU/uut/wb_rf_wena" type="logic">
+      <obj_property name="ElementShortName">wb_rf_wena</obj_property>
+      <obj_property name="ObjectShortName">wb_rf_wena</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_CPU/uut/rf_instance/registers" type="array">
+      <obj_property name="ElementShortName">registers[31:0][31:0]</obj_property>
+      <obj_property name="ObjectShortName">registers[31:0][31:0]</obj_property>
+      <obj_property name="isExpanded"></obj_property>
+   </wvobject>
+</wave_config>
