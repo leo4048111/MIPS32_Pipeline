@@ -43,5 +43,4 @@ CPU uut(
 
 always #10 clk = ~clk;
 
-
 endmodule
