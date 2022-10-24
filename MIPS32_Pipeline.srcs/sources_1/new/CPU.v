@@ -71,12 +71,26 @@ wire [`i4] id_aluc;
 wire [`i32] id_alu_a;
 wire [`i32] id_alu_b;
 
+wire [`i32] ex_out_wdata;
+wire ex_out_rf_wena;
+wire [`i5] ex_out_waddr;
+
+wire [`i32] mem_out_wdata;
+wire [`i5] mem_out_waddr;
+wire mem_out_rf_wena;
+
 ID id_instance(
     .rst(rst),
     .id_pc(id_pc),
     .id_inst(id_inst),
     .rf_rdata1(rf_rdata1),
     .rf_rdata2(rf_rdata2),
+    .ex_out_wdata(ex_out_wdata),
+    .ex_out_rf_wena(ex_out_rf_wena),
+    .ex_out_waddr(ex_out_waddr),
+    .mem_out_wdata(mem_out_wdata),
+    .mem_out_rf_wena(mem_out_rf_wena),
+    .mem_out_waddr(mem_out_waddr),
     .rf_rena1(rf_rena1),
     .rf_rena2(rf_rena2),
     .raddr1(raddr1),
@@ -129,10 +143,6 @@ ID_EX id_ex_instance(
     );
 
 // EX模块实例化
-wire [`i32] ex_out_wdata;
-wire ex_out_rf_wena;
-wire [`i5] ex_out_waddr;
-
 EX ex_instance(
     .rst(rst),
     .aluc(ex_aluc),
@@ -162,10 +172,6 @@ EX_MEM ex_mem_instance(
     );
 
 // MEM模块实例化
-wire [`i32] mem_out_wdata;
-wire [`i5] mem_out_waddr;
-wire mem_out_rf_wena;
-
 MEM mem_instance(
     .rst(rst),
     .i_wdata(mem_wdata),

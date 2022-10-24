@@ -28,6 +28,16 @@ module ID(
     input [`i32] id_inst,
     input [`i32] rf_rdata1, // 从Regfile读出的rdata1
     input [`i32] rf_rdata2, // 从Regfile读出的rdata2
+    // 为实现EX和MEM阶段数据前推添加的引脚
+    // 来自EX阶段的结果
+    input [`i32] ex_out_wdata,
+    input ex_out_rf_wena,
+    input [`i5] ex_out_waddr,
+    // 来自MEM阶段的结果
+    input [`i32] mem_out_wdata,
+    input mem_out_rf_wena,
+    input [`i5] mem_out_waddr,
+    // 输出引脚
     output rf_rena1, // 读使能信号1
     output rf_rena2, // 读使能信号2
     output [`i5] raddr1, // 寄存器堆读地址1
@@ -84,7 +94,7 @@ assign J = (op == `J);
 assign JAL = (op == `JAL);
 
 // 寄存器堆控制信号
-assign rf_rena1 = rst ? 0 : (~(J|JAL|LUI));
+assign rf_rena1 = rst ? 0 : (~(J|JAL|LUI|SLL|SRL|SRA));
 assign rf_rena2 = rst ? 0 : (~(J|JAL|LUI|ADDI|ADDIU|ANDI|ORI|XORI|LW|SW|BEQ|BNE|SLTI|SLTIU|LUI));
 assign raddr1 = rst ? 0 : id_inst[`rs];
 assign raddr2 = rst ? 0 : id_inst[`rt];
@@ -102,7 +112,45 @@ assign aluc[0] = SUBU | SUB | BEQ | BNE | OR | ORI | NOR  | SLT | SLTI | SRL | S
 assign aluc[1] = ADD | ADDI | SUB | BEQ | BNE | XOR | XORI | NOR | SLT | SLTI | SLTU | SLTIU | SLL | SLLV;
 assign aluc[2] = AND | ANDI | OR | ORI | XOR | XORI | NOR | SRA | SRAV | SLL | SLLV | SRL | SRLV;
 assign aluc[3] = LUI | SLT | SLTI | SLTU | SLTIU | SRA | SRAV | SLL | SLLV | SRL | SRLV;
-assign alu_a = rst ? 0 : ((SLL|SRL|SRA) ? {23'b0, shamt} : rf_rdata1);
-assign alu_b = rst ? 0 : (op && !BEQ && !BNE ? (should_sign_ext ? {{16{id_inst[15]}}, id_inst[15:0]} : {16'b0, id_inst[15:0]}) : rf_rdata2);
+
+reg [`i32] reg_alu_a;
+reg [`i32] reg_alu_b;
+
+// 设置第一个ALU操作数
+always @ (*) begin
+    if(rst) begin
+        reg_alu_a <= 0;
+    end
+    else if(SLL|SRL|SRA) //这三条指令不读Rs
+        reg_alu_a <= {23'b0, shamt};
+    else if(rf_rena1) begin
+        if((raddr1 == ex_out_waddr) && ex_out_rf_wena) // ex阶段的结果前推
+            reg_alu_a <= ex_out_wdata;
+        else if((raddr1 == mem_out_waddr) && mem_out_rf_wena) // mem阶段的结果前推
+            reg_alu_a <= mem_out_wdata;
+        else reg_alu_a <= rf_rdata1;
+    end
+end
+
+// 设置第二个ALU操作数
+always @ (*) begin
+    if(rst) begin
+        reg_alu_b <= 0;
+    end
+    else if(op && !BEQ && !BNE) begin
+        if(should_sign_ext) reg_alu_b <= {{16{id_inst[15]}}, id_inst[15:0]};
+        else reg_alu_b <= {16'b0, id_inst[15:0]};
+    end
+    else if(rf_rena2) begin
+        if((raddr2 == ex_out_waddr) && ex_out_rf_wena) // ex阶段的结果前推
+            reg_alu_b <= ex_out_wdata;
+        else if((raddr2 == mem_out_waddr) && mem_out_rf_wena) // mem阶段的结果前推
+            reg_alu_b <= mem_out_wdata;
+        else reg_alu_b <= rf_rdata2;
+    end
+end
+
+assign alu_a = reg_alu_a;
+assign alu_b = reg_alu_b;
 
 endmodule
