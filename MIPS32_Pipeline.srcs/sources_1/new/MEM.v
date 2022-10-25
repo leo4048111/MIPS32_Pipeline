@@ -35,6 +35,6 @@ module MEM(
 
 assign wdata = rst ? 0 : (LW ? DM_RData : i_wdata);
 assign rf_wena = rst ? 0 : i_rf_wena;
-assign waddr = rst ? 0 : i_waddr;
+assign waddr = rst ? 0 : i_waddr; 
 
 endmodule

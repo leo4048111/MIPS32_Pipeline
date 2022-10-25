@@ -36,6 +36,10 @@ always @ (posedge clk) begin
         id_pc <= 32'h0;
         id_inst <= 32'h0;
     end 
+    else if(stall[3] && !stall[2]) begin
+        id_pc <= 0;
+        id_inst <= 0;
+    end
     else if(stall[3]) begin
         id_pc <= id_pc;
         id_inst <= id_inst;

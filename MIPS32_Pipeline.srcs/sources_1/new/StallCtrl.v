@@ -24,13 +24,15 @@ module StallCtrl(
     input rst,
     input mem_reqStall,
     input id_reqStall,
+    input ex_reqStall,
     output reg[`i5] stall
     );
 
 always @ (*) begin
     if(rst) stall <= 5'b0;
-    else if(mem_reqStall) stall <= 5'b11110;
     else if(id_reqStall) stall <= 5'b11000;
+    else if(ex_reqStall) stall <= 5'b11100;
+    else if(mem_reqStall) stall <= 5'b11110;
     else stall <= 5'b0;
 end
 

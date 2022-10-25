@@ -31,12 +31,14 @@ module CPU(
 
 // 流水线暂停控制器实例化
 wire id_reqStall;
+wire ex_reqStall;
 wire mem_reqStall;
 wire [`i5] stall;
 StallCtrl stallCtrl_instance(
     .rst(rst),
     .mem_reqStall(mem_reqStall),
     .id_reqStall(id_reqStall),
+    .ex_reqStall(ex_reqStall),
     .stall(stall)
     );
 
@@ -255,5 +257,8 @@ MEM_WB mem_wb_instance(
     .wb_rf_wena(wb_rf_wena),
     .wb_waddr(wb_waddr)
     );
+
+assign ex_reqStall = (rf_rena1 && ex_dm_rena && (ex_out_waddr == raddr1)) || (rf_rena2 && ex_dm_rena && (ex_out_waddr == raddr2));
+assign mem_reqStall = (rf_rena1 && mem_dm_rena && (mem_out_waddr == raddr1)) || (rf_rena2 && mem_dm_rena && (mem_out_waddr == raddr2));
 
 endmodule

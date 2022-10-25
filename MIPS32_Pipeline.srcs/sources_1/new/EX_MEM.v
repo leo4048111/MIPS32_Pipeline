@@ -51,6 +51,15 @@ always @ (posedge clk) begin
         mem_dm_wdata <= 0;
         mem_dm_addr <= 0;
     end 
+    else if(stall[1] && !stall[0]) begin
+        mem_wdata <= 0;
+        mem_rf_wena <= 0;
+        mem_waddr <= 0;
+        mem_dm_wena <= 0;
+        mem_dm_rena <= 0;
+        mem_dm_wdata <= 0;
+        mem_dm_addr <= 0;
+    end
     else if(stall[1]) begin
         mem_wdata <= mem_wdata;
         mem_rf_wena <= mem_rf_wena;

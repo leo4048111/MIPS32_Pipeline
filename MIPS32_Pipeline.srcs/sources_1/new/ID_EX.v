@@ -61,6 +61,17 @@ always @ (posedge clk) begin
         ex_dm_wdata <= 0;
         ex_dm_addr <= 0;
     end
+    else if(stall[2] && !stall[1]) begin
+        ex_waddr <= 0;
+        ex_rf_wena <= 0;
+        ex_aluc <= 0;
+        ex_alu_a <= 0;
+        ex_alu_b <= 0;
+        ex_dm_wena <= 0;
+        ex_dm_rena <= 0;
+        ex_dm_wdata <= 0;
+        ex_dm_addr <= 0;
+    end
     else if(stall[2]) begin
         ex_waddr <= ex_waddr;
         ex_rf_wena <= ex_rf_wena;

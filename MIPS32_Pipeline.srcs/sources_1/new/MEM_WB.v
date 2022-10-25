@@ -40,9 +40,9 @@ always @ (posedge clk) begin
         wb_waddr <= 0;
     end
     else if(stall[0]) begin
-        wb_wdata <= wb_wdata;
-        wb_rf_wena <= wb_rf_wena;
-        wb_waddr <= wb_waddr;
+        wb_wdata <= 0;
+        wb_rf_wena <= 0;
+        wb_waddr <= 0;
     end
     else begin
         wb_wdata <= mem_wdata;
