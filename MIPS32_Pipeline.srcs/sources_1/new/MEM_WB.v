@@ -24,6 +24,7 @@
 module MEM_WB(
     input clk,
     input rst,
+    input [`i5] stall,
     input [`i32] mem_wdata, // 来自MEM的回写数据
     input mem_rf_wena, // 来自MEM的寄存器堆写入使能信号
     input [`i5] mem_waddr, // 来自MEM的寄存器堆写入地址
@@ -37,7 +38,13 @@ always @ (posedge clk) begin
         wb_wdata <= 0;
         wb_rf_wena <= 0;
         wb_waddr <= 0;
-    end else begin
+    end
+    else if(stall[0]) begin
+        wb_wdata <= wb_wdata;
+        wb_rf_wena <= wb_rf_wena;
+        wb_waddr <= wb_waddr;
+    end
+    else begin
         wb_wdata <= mem_wdata;
         wb_rf_wena <= mem_rf_wena;
         wb_waddr <= mem_waddr;

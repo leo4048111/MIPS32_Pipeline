@@ -46,7 +46,11 @@ module ID(
     output rf_wena, // 寄存器堆写使能信号
     output [`i4] aluc, // alu操作码
     output [`i32] alu_a, // alu操作数1
-    output [`i32] alu_b // alu操作数2
+    output [`i32] alu_b, // alu操作数2
+    output dm_wena,
+    output dm_rena,
+    output [`i32] dm_wdata,
+    output [10:0] dm_addr
     );
 
 wire [`i6] op, funct;
@@ -115,6 +119,41 @@ assign aluc[3] = LUI | SLT | SLTI | SLTU | SLTIU | SRA | SRAV | SLL | SLLV | SRL
 
 reg [`i32] reg_alu_a;
 reg [`i32] reg_alu_b;
+reg [`i32] reg_read_data1;
+reg [`i32] reg_read_data2;
+
+// 设置第一个读出数据
+always @ (*) begin
+    if(rst) begin
+        reg_read_data1 <= 0;
+    end
+    else if(rf_rena1) begin
+        if((raddr1 == ex_out_waddr) && ex_out_rf_wena) // ex阶段的结果前推
+            reg_read_data1 <= ex_out_wdata;
+        else if((raddr1 == mem_out_waddr) && mem_out_rf_wena) // mem阶段的结果前推
+            reg_read_data1 <= mem_out_wdata;
+        else reg_read_data1 <= rf_rdata1;
+    end
+end
+
+// 设置第二个读出数据
+always @ (*) begin
+    if(rst) begin
+        reg_read_data2 <= 0;
+    end
+    else if(rf_rena2) begin
+        if((raddr2 == ex_out_waddr) && ex_out_rf_wena) // ex阶段的结果前推
+            reg_read_data2 <= ex_out_wdata;
+        else if((raddr2 == mem_out_waddr) && mem_out_rf_wena) // mem阶段的结果前推
+            reg_read_data2 <= mem_out_wdata;
+        else reg_read_data2 <= rf_rdata2;
+    end
+end
+
+assign dm_wena = SW;
+assign dm_rena = LW;
+assign dm_wdata = reg_read_data2;
+assign dm_addr = (reg_read_data1 + {{16{id_inst[15]}}, id_inst[15:0]} - 32'h10010000)/4;
 
 // 设置第一个ALU操作数
 always @ (*) begin
@@ -124,11 +163,7 @@ always @ (*) begin
     else if(SLL|SRL|SRA) //这三条指令不读Rs
         reg_alu_a <= {23'b0, shamt};
     else if(rf_rena1) begin
-        if((raddr1 == ex_out_waddr) && ex_out_rf_wena) // ex阶段的结果前推
-            reg_alu_a <= ex_out_wdata;
-        else if((raddr1 == mem_out_waddr) && mem_out_rf_wena) // mem阶段的结果前推
-            reg_alu_a <= mem_out_wdata;
-        else reg_alu_a <= rf_rdata1;
+        reg_alu_a <= reg_read_data1;
     end
 end
 
@@ -142,11 +177,7 @@ always @ (*) begin
         else reg_alu_b <= {16'b0, id_inst[15:0]};
     end
     else if(rf_rena2) begin
-        if((raddr2 == ex_out_waddr) && ex_out_rf_wena) // ex阶段的结果前推
-            reg_alu_b <= ex_out_wdata;
-        else if((raddr2 == mem_out_waddr) && mem_out_rf_wena) // mem阶段的结果前推
-            reg_alu_b <= mem_out_wdata;
-        else reg_alu_b <= rf_rdata2;
+        reg_alu_b <= reg_read_data2;
     end
 end
 

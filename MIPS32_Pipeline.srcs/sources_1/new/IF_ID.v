@@ -24,7 +24,7 @@
 module IF_ID(
     input clk,
     input rst,
-
+    input [`i5] stall,
     input [`i32] if_pc, // 取指阶段pc
     input [`i32] if_inst, // 取值阶段指令
     output reg [`i32] id_pc, // 译码阶段pc
@@ -35,7 +35,12 @@ always @ (posedge clk) begin
     if(rst) begin
         id_pc <= 32'h0;
         id_inst <= 32'h0;
-    end else begin
+    end 
+    else if(stall[3]) begin
+        id_pc <= id_pc;
+        id_inst <= id_inst;
+    end
+    else begin
         id_pc <= if_pc;
         id_inst <= if_inst;
     end

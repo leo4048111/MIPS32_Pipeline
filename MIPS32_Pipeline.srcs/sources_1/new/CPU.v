@@ -29,12 +29,23 @@ module CPU(
     output IM_rena
     );
 
+// 流水线暂停控制器实例化
+wire id_reqStall;
+wire mem_reqStall;
+wire [`i5] stall;
+StallCtrl stallCtrl_instance(
+    .rst(rst),
+    .mem_reqStall(mem_reqStall),
+    .id_reqStall(id_reqStall),
+    .stall(stall)
+    );
+
 // PC寄存器实例化
 wire [`i32] pc;
 wire [`i32] npc;
 
 assign IM_Addr = pc;
-assign npc = pc + 4;
+assign npc = stall[4] ? pc : pc + 4;
 
 PC pc_instance(
     .clk(clk),
@@ -52,6 +63,7 @@ wire [`i32] id_inst;
 IF_ID if_id_instance(
     .clk(clk),
     .rst(rst),
+    .stall(stall),
     .if_pc(pc),
     .if_inst(IM_Inst),
     .id_pc(id_pc),
@@ -79,6 +91,11 @@ wire [`i32] mem_out_wdata;
 wire [`i5] mem_out_waddr;
 wire mem_out_rf_wena;
 
+wire id_dm_wena;
+wire id_dm_rena;
+wire [`i32] id_dm_wdata;
+wire [10:0] id_dm_addr;
+
 ID id_instance(
     .rst(rst),
     .id_pc(id_pc),
@@ -99,7 +116,11 @@ ID id_instance(
     .rf_wena(id_rf_wena),
     .aluc(id_aluc),
     .alu_a(id_alu_a),
-    .alu_b(id_alu_b)
+    .alu_b(id_alu_b),
+    .dm_wena(id_dm_wena),
+    .dm_rena(id_dm_rena),
+    .dm_wdata(id_dm_wdata),
+    .dm_addr(id_dm_addr)
     );
 
 // 寄存器堆模块实例化
@@ -126,20 +147,33 @@ wire ex_rf_wena;
 wire [`i4] ex_aluc;
 wire [`i32] ex_alu_a;
 wire [`i32] ex_alu_b;
+wire ex_dm_wena;
+wire ex_dm_rena;
+wire [`i32] ex_dm_wdata;
+wire [10:0] ex_dm_addr;
 
 ID_EX id_ex_instance(
     .clk(clk),
     .rst(rst),
+    .stall(stall),
     .id_waddr(id_waddr),
     .id_rf_wena(id_rf_wena),
     .id_aluc(id_aluc),
     .id_alu_a(id_alu_a),
     .id_alu_b(id_alu_b),
+    .id_dm_wena(id_dm_wena),
+    .id_dm_rena(id_dm_rena),
+    .id_dm_wdata(id_dm_wdata),
+    .id_dm_addr(id_dm_addr),
     .ex_waddr(ex_waddr),
     .ex_rf_wena(ex_rf_wena),
     .ex_aluc(ex_aluc),
     .ex_alu_a(ex_alu_a),
-    .ex_alu_b(ex_alu_b)
+    .ex_alu_b(ex_alu_b),
+    .ex_dm_wena(ex_dm_wena),
+    .ex_dm_rena(ex_dm_rena),
+    .ex_dm_wdata(ex_dm_wdata),
+    .ex_dm_addr(ex_dm_addr)
     );
 
 // EX模块实例化
@@ -159,33 +193,61 @@ EX ex_instance(
 wire [`i32] mem_wdata;
 wire [`i5] mem_waddr;
 wire mem_rf_wena;
+wire mem_dm_wena;
+wire mem_dm_rena;
+wire [`i32] mem_dm_wdata;
+wire [10:0] mem_dm_addr;
 
 EX_MEM ex_mem_instance(
-    .rst(rst),
     .clk(clk),
+    .rst(rst),
+    .stall(stall),
     .ex_wdata(ex_out_wdata),
     .ex_rf_wena(ex_out_rf_wena),
     .ex_waddr(ex_out_waddr),
+    .ex_dm_wena(ex_dm_wena),
+    .ex_dm_rena(ex_dm_rena),
+    .ex_dm_wdata(ex_dm_wdata),
+    .ex_dm_addr(ex_dm_addr),
     .mem_wdata(mem_wdata),
     .mem_rf_wena(mem_rf_wena),
-    .mem_waddr(mem_waddr)
+    .mem_waddr(mem_waddr),
+    .mem_dm_wena(mem_dm_wena),
+    .mem_dm_rena(mem_dm_rena),
+    .mem_dm_wdata(mem_dm_wdata),
+    .mem_dm_addr(mem_dm_addr)
     );
 
 // MEM模块实例化
+wire [`i32] DM_RData;
 MEM mem_instance(
     .rst(rst),
     .i_wdata(mem_wdata),
     .i_rf_wena(mem_rf_wena),
     .i_waddr(mem_waddr),
+    .LW(mem_dm_rena),
+    .DM_RData(DM_RData),
     .wdata(mem_out_wdata),
     .rf_wena(mem_out_rf_wena),
     .waddr(mem_out_waddr)
+    );
+
+// DMEM模块实例化
+DMEM dmem_instance(
+    .clk(clk),
+    .rst(rst),
+    .DM_Addr(mem_dm_addr),
+    .DM_WData(mem_dm_wdata),
+    .DM_W(mem_dm_wena),
+    .DM_R(mem_dm_rena),
+    .DM_RData(DM_RData)
     );
 
 // MEM_WB模块实例化
 MEM_WB mem_wb_instance(
     .clk(clk),
     .rst(rst),
+    .stall(stall),
     .mem_wdata(mem_out_wdata),
     .mem_rf_wena(mem_out_rf_wena),
     .mem_waddr(mem_out_waddr),

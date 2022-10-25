@@ -24,6 +24,7 @@
 module ID_EX(
     input clk,
     input rst,
+    input [`i5] stall,
 
     // 来自ID的信息
     input [`i5] id_waddr, // 寄存器堆写地址
@@ -31,13 +32,21 @@ module ID_EX(
     input [`i4] id_aluc, // alu操作码
     input [`i32] id_alu_a, // alu操作数1
     input [`i32] id_alu_b, // alu操作数2
+    input id_dm_wena,
+    input id_dm_rena,
+    input [`i32] id_dm_wdata,
+    input [10:0] id_dm_addr,
 
     // 传递到EX的信息
     output reg [`i5] ex_waddr, // 寄存器堆写地址
     output reg ex_rf_wena, // 寄存器堆写使能信号
     output reg [`i4] ex_aluc, // alu操作码
     output reg [`i32] ex_alu_a, // alu操作数1
-    output reg [`i32] ex_alu_b // alu操作数2
+    output reg [`i32] ex_alu_b, // alu操作数2
+    output reg ex_dm_wena,
+    output reg ex_dm_rena,
+    output reg [`i32] ex_dm_wdata,
+    output reg [10:0] ex_dm_addr
     );
 
 always @ (posedge clk) begin
@@ -47,12 +56,32 @@ always @ (posedge clk) begin
         ex_aluc <= 0;
         ex_alu_a <= 0;
         ex_alu_b <= 0;
-    end else begin
+        ex_dm_wena <= 0;
+        ex_dm_rena <= 0;
+        ex_dm_wdata <= 0;
+        ex_dm_addr <= 0;
+    end
+    else if(stall[2]) begin
+        ex_waddr <= ex_waddr;
+        ex_rf_wena <= ex_rf_wena;
+        ex_aluc <= ex_aluc;
+        ex_alu_a <= ex_alu_a;
+        ex_alu_b <= ex_alu_b;
+        ex_dm_wena <= ex_dm_wena;
+        ex_dm_rena <= ex_dm_rena;
+        ex_dm_wdata <= ex_dm_wdata;
+        ex_dm_addr <= ex_dm_addr;
+    end
+    else begin
         ex_waddr <= id_waddr;
         ex_rf_wena <= id_rf_wena;
         ex_aluc <= id_aluc;
         ex_alu_a <= id_alu_a;
         ex_alu_b <= id_alu_b;
+        ex_dm_wena <= id_dm_wena;
+        ex_dm_rena <= id_dm_rena;
+        ex_dm_wdata <= id_dm_wdata;
+        ex_dm_addr <= id_dm_addr;
     end
 end
 
