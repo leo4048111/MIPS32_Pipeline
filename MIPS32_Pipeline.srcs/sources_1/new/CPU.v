@@ -25,7 +25,7 @@ module CPU(
     input clk,
     input rst,
     input [`i32] IM_Inst,
-    output [`i32] IM_Addr,
+    output [`i32] pc,
     output IM_rena
     );
 
@@ -33,9 +33,11 @@ module CPU(
 wire id_reqStall;
 wire ex_reqStall;
 wire mem_reqStall;
+wire jump_reqStall;
 wire [`i5] stall;
 StallCtrl stallCtrl_instance(
     .rst(rst),
+    .jump_reqStall(jump_reqStall),
     .mem_reqStall(mem_reqStall),
     .id_reqStall(id_reqStall),
     .ex_reqStall(ex_reqStall),
@@ -43,16 +45,13 @@ StallCtrl stallCtrl_instance(
     );
 
 // PC寄存器实例化
-wire [`i32] pc;
 wire [`i32] npc;
-
-assign IM_Addr = pc;
-assign npc = stall[4] ? pc : pc + 4;
 
 PC pc_instance(
     .clk(clk),
     .rst(rst),
-    .pc_wena(1),
+    .stall(stall),
+    .pc_wena(1'b1),
     .npc(npc),
     .pc(pc),
     .IM_rena(IM_rena)
@@ -98,6 +97,15 @@ wire id_dm_rena;
 wire [`i32] id_dm_wdata;
 wire [10:0] id_dm_addr;
 
+wire is_BEQ;
+wire is_BNE;
+wire is_Jump;
+wire [`i32] id_jump_addr;
+
+assign npc = is_Jump ? id_jump_addr : pc + 4;
+//assign npc = pc + 4;
+assign jump_reqStall = is_Jump;
+
 ID id_instance(
     .rst(rst),
     .id_pc(id_pc),
@@ -122,7 +130,11 @@ ID id_instance(
     .dm_wena(id_dm_wena),
     .dm_rena(id_dm_rena),
     .dm_wdata(id_dm_wdata),
-    .dm_addr(id_dm_addr)
+    .dm_addr(id_dm_addr),
+    .is_BEQ(is_BEQ),
+    .is_BNE(is_BNE),
+    .is_Jump(is_Jump),
+    .id_jump_addr(id_jump_addr)
     );
 
 // 寄存器堆模块实例化

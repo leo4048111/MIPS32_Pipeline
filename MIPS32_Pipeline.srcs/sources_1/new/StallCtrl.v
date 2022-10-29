@@ -22,6 +22,7 @@
 
 module StallCtrl(
     input rst,
+    input jump_reqStall,
     input mem_reqStall,
     input id_reqStall,
     input ex_reqStall,
@@ -30,6 +31,7 @@ module StallCtrl(
 
 always @ (*) begin
     if(rst) stall <= 5'b0;
+    else if(jump_reqStall) stall <= 5'b01000;
     else if(id_reqStall) stall <= 5'b11000;
     else if(ex_reqStall) stall <= 5'b11100;
     else if(mem_reqStall) stall <= 5'b11110;

@@ -24,6 +24,7 @@
 module PC(
     input clk,
     input rst,
+    input [`i5] stall,
     input pc_wena,
     input [`i32] npc,
     output reg [`i32] pc,
@@ -33,6 +34,10 @@ module PC(
 always @ (posedge clk) begin
     if (rst) begin 
         pc <= 32'h00004000;
+        IM_rena <= 1;
+    end
+    else if(stall[4]) begin
+        pc <= pc;
         IM_rena <= 0;
     end
     else begin 

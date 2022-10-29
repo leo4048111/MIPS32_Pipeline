@@ -50,7 +50,11 @@ module ID(
     output dm_wena,
     output dm_rena,
     output [`i32] dm_wdata,
-    output [10:0] dm_addr
+    output [10:0] dm_addr,
+    output is_BEQ,
+    output is_BNE,
+    output is_Jump,
+    output reg[`i32] id_jump_addr
     );
 
 wire [`i6] op, funct;
@@ -96,6 +100,11 @@ assign LUI = (op == `LUI);
 wire J,JAL;
 assign J = (op == `J);
 assign JAL = (op == `JAL);
+
+// 跳转类型
+assign is_BNE = rst ? 0 : BNE;
+assign is_BEQ = rst ? 0 : BEQ;
+assign is_Jump = rst ? 0 : (J | JAL | JR);
 
 // 寄存器堆控制信号
 assign rf_rena1 = rst ? 0 : (~(J|JAL|LUI|SLL|SRL|SRA));
@@ -148,6 +157,20 @@ always @ (*) begin
             reg_read_data2 <= mem_out_wdata;
         else reg_read_data2 <= rf_rdata2;
     end
+end
+
+wire [`i32] npc = id_pc + 4;
+
+// 设置跳转地址
+always @ (*)
+begin
+    if(rst) begin
+        id_jump_addr <= 0;
+    end
+    else if(JR) id_jump_addr <= reg_read_data1;
+    else if(J | JAL) id_jump_addr <= {npc[31:28], id_inst[25:0], 2'b0}; 
+    else if(BEQ || BNE) id_jump_addr <= npc + {{14{id_inst[15]}}, id_inst[15:0], 2'b0};
+    else id_jump_addr <= npc;
 end
 
 assign dm_wena = SW;
