@@ -45,7 +45,7 @@ StallCtrl stallCtrl_instance(
     );
 
 // PC寄存器实例化
-wire [`i32] npc;
+reg [`i32] npc;
 
 PC pc_instance(
     .clk(clk),
@@ -102,7 +102,6 @@ wire is_BNE;
 wire is_Jump;
 wire [`i32] id_jump_addr;
 
-assign npc = is_Jump ? id_jump_addr : pc + 4;
 //assign npc = pc + 4;
 assign jump_reqStall = is_Jump;
 
@@ -137,6 +136,8 @@ ID id_instance(
     .id_jump_addr(id_jump_addr)
     );
 
+assign id_reqStall = is_BEQ || is_BNE;
+
 // 寄存器堆模块实例化
 wire [`i32] wb_wdata;
 wire wb_rf_wena;
@@ -166,6 +167,10 @@ wire ex_dm_rena;
 wire [`i32] ex_dm_wdata;
 wire [10:0] ex_dm_addr;
 
+wire ex_is_BNE;
+wire ex_is_BEQ;
+wire [`i32] ex_jump_addr;
+
 ID_EX id_ex_instance(
     .clk(clk),
     .rst(rst),
@@ -179,6 +184,9 @@ ID_EX id_ex_instance(
     .id_dm_rena(id_dm_rena),
     .id_dm_wdata(id_dm_wdata),
     .id_dm_addr(id_dm_addr),
+    .id_is_BNE(is_BNE),
+    .id_is_BEQ(is_BEQ),
+    .id_jump_addr(id_jump_addr),
     .ex_waddr(ex_waddr),
     .ex_rf_wena(ex_rf_wena),
     .ex_aluc(ex_aluc),
@@ -187,10 +195,17 @@ ID_EX id_ex_instance(
     .ex_dm_wena(ex_dm_wena),
     .ex_dm_rena(ex_dm_rena),
     .ex_dm_wdata(ex_dm_wdata),
-    .ex_dm_addr(ex_dm_addr)
+    .ex_dm_addr(ex_dm_addr),
+    .ex_is_BNE(ex_is_BNE),
+    .ex_is_BEQ(ex_is_BEQ),
+    .ex_jump_addr(ex_jump_addr)
     );
 
 // EX模块实例化
+wire CF;
+wire OF;
+wire SF;
+wire ZF;
 EX ex_instance(
     .rst(rst),
     .aluc(ex_aluc),
@@ -200,8 +215,22 @@ EX ex_instance(
     .i_waddr(ex_waddr),
     .wdata(ex_out_wdata),
     .rf_wena(ex_out_rf_wena),
-    .waddr(ex_out_waddr)
+    .waddr(ex_out_waddr),
+    .CF(CF),
+    .OF(OF),
+    .SF(SF),
+    .ZF(ZF)
     );
+
+always @ (*) begin
+    if(is_Jump) npc <= id_jump_addr;
+    else if(ex_is_BEQ || ex_is_BNE) begin
+        if((ex_is_BEQ && ZF) || (ex_is_BNE && !ZF)) npc <= ex_jump_addr;
+        else npc <= pc;
+    end
+    else npc <= pc + 4;
+end
+
 
 // EX_MEM模块实例化
 wire [`i32] mem_wdata;

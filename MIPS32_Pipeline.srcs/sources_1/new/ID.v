@@ -108,7 +108,7 @@ assign is_Jump = rst ? 0 : (J | JAL | JR);
 
 // 寄存器堆控制信号
 assign rf_rena1 = rst ? 0 : (~(J|JAL|LUI|SLL|SRL|SRA));
-assign rf_rena2 = rst ? 0 : (~(J|JAL|LUI|ADDI|ADDIU|ANDI|ORI|XORI|LW|SW|BEQ|BNE|SLTI|SLTIU|LUI));
+assign rf_rena2 = rst ? 0 : (~(J|JAL|LUI|ADDI|ADDIU|ANDI|ORI|XORI|LW|SLTI|SLTIU|LUI));
 assign raddr1 = rst ? 0 : id_inst[`rs];
 assign raddr2 = rst ? 0 : id_inst[`rt];
 assign waddr = rst ? 0 : (JAL ? 31 : (op ? id_inst[`rt] : id_inst[`rd]));

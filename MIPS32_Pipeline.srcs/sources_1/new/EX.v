@@ -30,14 +30,17 @@ module EX(
     input [`i5] i_waddr, // 写入地址输入
     output [`i32] wdata, // 运算结果
     output rf_wena, // 写入使能信号输出
-    output [`i5] waddr // 写入地址输出
+    output [`i5] waddr, // 写入地址输出
+    output reg CF,
+    output reg OF,
+    output reg SF,
+    output reg ZF
     );
 
 assign rf_wena = i_rf_wena;
 assign waddr = i_waddr;
 
 reg [`i32] ALU_Result;
-reg CF, OF, SF, ZF;
 
 always@(*)  //采用组合逻辑设计ALU
 begin
@@ -95,6 +98,15 @@ casex (aluc)
     default:
         ;
 endcase
+
+    if(ALU_Result == 32'b0)
+        ZF = 1;
+    else 
+        ZF = 0;
+            
+    if(aluc != 4'b101x)
+        SF = ALU_Result[31];
+    else;
 end
 
 assign wdata = rst ? 0 : ALU_Result;
