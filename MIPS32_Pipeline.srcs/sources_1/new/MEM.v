@@ -30,7 +30,7 @@ module MEM(
     input [`i32] DM_RData,
     output [`i32] wdata, // 运算结果输出
     output rf_wena, // 写入使能信号输出
-    output [`i5] waddr // EX的写入地址输出
+    output [`i5] waddr // MEM的写入地址输出
     );
 
 assign wdata = rst ? 0 : (LW ? DM_RData : i_wdata);
