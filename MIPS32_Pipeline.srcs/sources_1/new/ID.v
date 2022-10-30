@@ -173,6 +173,7 @@ begin
     else id_jump_addr <= npc;
 end
 
+// 数据存储器控制信号
 assign dm_wena = SW;
 assign dm_rena = LW;
 assign dm_wdata = reg_read_data2;
