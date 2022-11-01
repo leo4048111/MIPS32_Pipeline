@@ -1,0 +1,6 @@
+set_property SRC_FILE_INFO {cfile:D:/Projects/Vivado/MIPS32_Pipeline/MIPS32_Pipeline.runs/synth_1/.Xil/Vivado-28620-DESKTOP-55513A7/dcp/dist_mem_gen_0_in_context.xdc rfile:../dcp/dist_mem_gen_0_in_context.xdc id:1 order:EARLY scoped_inst:imem_instance/dmg_inst_0} [current_design]
+set_property SRC_FILE_INFO {cfile:D:/Projects/Vivado/MIPS32_Pipeline/MIPS32_Pipeline.srcs/constrs_1/new/tb.xdc rfile:../../../../../MIPS32_Pipeline.srcs/constrs_1/new/tb.xdc id:2} [current_design]
+set_property src_info {type:SCOPED_XDC file:1 line:1 export:INPUT save:INPUT read:READ} [current_design]
+set_property IS_IP_OOC_CELL true [get_cells imem_instance/dmg_inst_0]
+set_property src_info {type:XDC file:2 line:8 export:INPUT save:INPUT read:READ} [current_design]
+create_clock -period 10.000 -name sys_clk_pin -waveform {0.000 5.000} -add [get_ports clk]
