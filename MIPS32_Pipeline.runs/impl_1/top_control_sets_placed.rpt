@@ -1,0 +1,127 @@
+Copyright 1986-2016 Xilinx, Inc. All Rights Reserved.
+------------------------------------------------------------------------------------
+| Tool Version : Vivado v.2016.2 (win64) Build 1577090 Thu Jun  2 16:32:40 MDT 2016
+| Date         : Tue Nov 01 11:18:17 2022
+| Host         : DESKTOP-55513A7 running 64-bit major release  (build 9200)
+| Command      : report_control_sets -verbose -file top_control_sets_placed.rpt
+| Design       : top
+| Device       : xc7a100t
+------------------------------------------------------------------------------------
+
+Control Set Information
+
+Table of Contents
+-----------------
+1. Summary
+2. Flip-Flop Distribution
+3. Detailed Control Set Information
+
+1. Summary
+----------
+
++----------------------------------------------------------+-------+
+|                          Status                          | Count |
++----------------------------------------------------------+-------+
+| Number of unique control sets                            |    74 |
+| Unused register locations in slices containing registers |    31 |
++----------------------------------------------------------+-------+
+
+
+2. Flip-Flop Distribution
+-------------------------
+
++--------------+-----------------------+------------------------+-----------------+--------------+
+| Clock Enable | Synchronous Set/Reset | Asynchronous Set/Reset | Total Registers | Total Slices |
++--------------+-----------------------+------------------------+-----------------+--------------+
+| No           | No                    | No                     |               1 |            1 |
+| No           | No                    | Yes                    |               0 |            0 |
+| No           | Yes                   | No                     |             166 |           70 |
+| Yes          | No                    | No                     |             800 |          290 |
+| Yes          | No                    | Yes                    |               0 |            0 |
+| Yes          | Yes                   | No                     |            1490 |          578 |
++--------------+-----------------------+------------------------+-----------------+--------------+
+
+
+3. Detailed Control Set Information
+-----------------------------------
+
++----------------+-------------------------------------------------------+-----------------------------------------------+------------------+----------------+
+|  Clock Signal  |                     Enable Signal                     |                Set/Reset Signal               | Slice Load Count | Bel Load Count |
++----------------+-------------------------------------------------------+-----------------------------------------------+------------------+----------------+
+|  clk_IBUF_BUFG |                                                       |                                               |                1 |              1 |
+|  n_1_2803_BUFG |                                                       | rst_IBUF                                      |                3 |              5 |
+|  clk_IBUF_BUFG | cpu_instance/if_id_instance/IM_rena_reg[0]            | rst_IBUF                                      |                4 |             12 |
+|  n_1_2803_BUFG |                                                       | cpu_instance/if_id_instance/AR[0]             |                9 |             27 |
+|  rf_rena2      |                                                       | rst_IBUF                                      |               17 |             32 |
+|  clk_IBUF_BUFG | cpu_instance/ex_mem_instance/E[0]                     | rst_IBUF                                      |               17 |             32 |
+|  clk_IBUF_BUFG | cpu_instance/ex_mem_instance/memory_reg[10][31][0]    |                                               |               15 |             32 |
+|  clk_IBUF_BUFG | cpu_instance/ex_mem_instance/memory_reg[11][31][0]    |                                               |                7 |             32 |
+|  clk_IBUF_BUFG | cpu_instance/ex_mem_instance/memory_reg[12][31][0]    |                                               |                8 |             32 |
+|  clk_IBUF_BUFG | cpu_instance/ex_mem_instance/memory_reg[13][31][0]    |                                               |               12 |             32 |
+|  clk_IBUF_BUFG | cpu_instance/ex_mem_instance/memory_reg[14][31][0]    |                                               |                8 |             32 |
+|  clk_IBUF_BUFG | cpu_instance/ex_mem_instance/memory_reg[15][31][0]    |                                               |               15 |             32 |
+|  clk_IBUF_BUFG | cpu_instance/ex_mem_instance/memory_reg[16][31][0]    |                                               |               13 |             32 |
+|  clk_IBUF_BUFG | cpu_instance/ex_mem_instance/memory_reg[17][31][0]    |                                               |               11 |             32 |
+|  clk_IBUF_BUFG | cpu_instance/ex_mem_instance/memory_reg[18][31][0]    |                                               |               15 |             32 |
+|  clk_IBUF_BUFG | cpu_instance/ex_mem_instance/memory_reg[19][31][0]    |                                               |               10 |             32 |
+|  clk_IBUF_BUFG | cpu_instance/ex_mem_instance/memory_reg[1][31][0]     | rst_IBUF                                      |                7 |             32 |
+|  clk_IBUF_BUFG | cpu_instance/ex_mem_instance/memory_reg[20][31][0]    |                                               |               11 |             32 |
+|  clk_IBUF_BUFG | cpu_instance/ex_mem_instance/memory_reg[21][31][0]    |                                               |               10 |             32 |
+|  clk_IBUF_BUFG | cpu_instance/ex_mem_instance/memory_reg[22][31][0]    |                                               |               15 |             32 |
+|  clk_IBUF_BUFG | cpu_instance/ex_mem_instance/memory_reg[23][31][0]    |                                               |               17 |             32 |
+|  clk_IBUF_BUFG | cpu_instance/ex_mem_instance/memory_reg[24][31][0]    |                                               |               11 |             32 |
+|  clk_IBUF_BUFG | cpu_instance/ex_mem_instance/memory_reg[25][31][0]    |                                               |                9 |             32 |
+|  clk_IBUF_BUFG | cpu_instance/ex_mem_instance/memory_reg[26][31][0]    |                                               |                8 |             32 |
+|  clk_IBUF_BUFG | cpu_instance/ex_mem_instance/memory_reg[27][31][0]    |                                               |                8 |             32 |
+|  clk_IBUF_BUFG | cpu_instance/ex_mem_instance/memory_reg[28][31][0]    |                                               |               11 |             32 |
+|  clk_IBUF_BUFG | cpu_instance/ex_mem_instance/memory_reg[29][31][0]    |                                               |               12 |             32 |
+|  clk_IBUF_BUFG | cpu_instance/ex_mem_instance/memory_reg[2][31][0]     | rst_IBUF                                      |                8 |             32 |
+|  clk_IBUF_BUFG | cpu_instance/ex_mem_instance/memory_reg[30][31][0]    |                                               |               13 |             32 |
+|  clk_IBUF_BUFG | cpu_instance/ex_mem_instance/memory_reg[31][31][0]    |                                               |               14 |             32 |
+|  clk_IBUF_BUFG | cpu_instance/ex_mem_instance/memory_reg[3][31][0]     | rst_IBUF                                      |               11 |             32 |
+|  clk_IBUF_BUFG | cpu_instance/ex_mem_instance/memory_reg[5][31][0]     | rst_IBUF                                      |               10 |             32 |
+|  clk_IBUF_BUFG | cpu_instance/ex_mem_instance/memory_reg[6][31][0]     | rst_IBUF                                      |               13 |             32 |
+|  clk_IBUF_BUFG | cpu_instance/ex_mem_instance/memory_reg[7][31][0]     |                                               |               16 |             32 |
+|  clk_IBUF_BUFG | cpu_instance/ex_mem_instance/memory_reg[8][31][0]     |                                               |               10 |             32 |
+|  clk_IBUF_BUFG | cpu_instance/ex_mem_instance/memory_reg[9][31][0]     |                                               |               11 |             32 |
+|  rf_rena1      |                                                       | rst_IBUF                                      |               14 |             32 |
+|  clk_IBUF_BUFG | cpu_instance/ex_mem_instance/memory_reg[4][31][0]     | rst_IBUF                                      |               10 |             32 |
+|  clk_IBUF_BUFG | cpu_instance/mem_wb_instance/E[0]                     | rst_IBUF                                      |               17 |             32 |
+|  clk_IBUF_BUFG | cpu_instance/mem_wb_instance/registers_reg[10][31][0] | rst_IBUF                                      |                8 |             32 |
+|  clk_IBUF_BUFG | cpu_instance/mem_wb_instance/registers_reg[11][31][0] | rst_IBUF                                      |                7 |             32 |
+|  clk_IBUF_BUFG | cpu_instance/mem_wb_instance/registers_reg[12][31][0] | rst_IBUF                                      |                8 |             32 |
+|  clk_IBUF_BUFG | cpu_instance/mem_wb_instance/registers_reg[13][31][0] | rst_IBUF                                      |                6 |             32 |
+|  clk_IBUF_BUFG | cpu_instance/mem_wb_instance/registers_reg[16][31][0] | rst_IBUF                                      |               13 |             32 |
+|  clk_IBUF_BUFG | cpu_instance/mem_wb_instance/registers_reg[14][31][0] | rst_IBUF                                      |                9 |             32 |
+|  clk_IBUF_BUFG | cpu_instance/mem_wb_instance/registers_reg[15][31][0] | rst_IBUF                                      |               10 |             32 |
+|  clk_IBUF_BUFG | cpu_instance/mem_wb_instance/registers_reg[17][31][0] | rst_IBUF                                      |                7 |             32 |
+|  clk_IBUF_BUFG | cpu_instance/mem_wb_instance/registers_reg[18][31][0] | rst_IBUF                                      |                8 |             32 |
+|  clk_IBUF_BUFG | cpu_instance/mem_wb_instance/registers_reg[19][31][0] | rst_IBUF                                      |                9 |             32 |
+|  clk_IBUF_BUFG | cpu_instance/mem_wb_instance/registers_reg[1][31][0]  | rst_IBUF                                      |               11 |             32 |
+|  clk_IBUF_BUFG | cpu_instance/mem_wb_instance/registers_reg[20][31][0] | rst_IBUF                                      |               13 |             32 |
+|  clk_IBUF_BUFG | cpu_instance/mem_wb_instance/registers_reg[21][31][0] | rst_IBUF                                      |               10 |             32 |
+|  clk_IBUF_BUFG | cpu_instance/mem_wb_instance/registers_reg[22][31][0] | rst_IBUF                                      |               14 |             32 |
+|  clk_IBUF_BUFG | cpu_instance/mem_wb_instance/registers_reg[23][31][0] | rst_IBUF                                      |                8 |             32 |
+|  clk_IBUF_BUFG | cpu_instance/mem_wb_instance/registers_reg[24][31][0] | rst_IBUF                                      |                8 |             32 |
+|  clk_IBUF_BUFG | cpu_instance/mem_wb_instance/registers_reg[25][31][0] | rst_IBUF                                      |               10 |             32 |
+|  clk_IBUF_BUFG | cpu_instance/mem_wb_instance/registers_reg[26][31][0] | rst_IBUF                                      |                7 |             32 |
+|  clk_IBUF_BUFG | cpu_instance/mem_wb_instance/registers_reg[27][31][0] | rst_IBUF                                      |               17 |             32 |
+|  clk_IBUF_BUFG | cpu_instance/mem_wb_instance/registers_reg[28][31][0] | rst_IBUF                                      |               16 |             32 |
+|  clk_IBUF_BUFG | cpu_instance/mem_wb_instance/registers_reg[29][31][0] | rst_IBUF                                      |               13 |             32 |
+|  clk_IBUF_BUFG | cpu_instance/mem_wb_instance/registers_reg[2][31][0]  | rst_IBUF                                      |               12 |             32 |
+|  clk_IBUF_BUFG | cpu_instance/mem_wb_instance/registers_reg[30][31][0] | rst_IBUF                                      |               19 |             32 |
+|  clk_IBUF_BUFG | cpu_instance/mem_wb_instance/registers_reg[3][31][0]  | rst_IBUF                                      |               11 |             32 |
+|  clk_IBUF_BUFG | cpu_instance/mem_wb_instance/registers_reg[4][31][0]  | rst_IBUF                                      |               12 |             32 |
+|  clk_IBUF_BUFG | cpu_instance/mem_wb_instance/registers_reg[5][31][0]  | rst_IBUF                                      |               18 |             32 |
+|  clk_IBUF_BUFG | cpu_instance/mem_wb_instance/registers_reg[6][31][0]  | rst_IBUF                                      |               22 |             32 |
+|  clk_IBUF_BUFG | cpu_instance/mem_wb_instance/registers_reg[7][31][0]  | rst_IBUF                                      |               24 |             32 |
+|  clk_IBUF_BUFG | cpu_instance/mem_wb_instance/registers_reg[8][31][0]  | rst_IBUF                                      |               19 |             32 |
+|  clk_IBUF_BUFG | cpu_instance/mem_wb_instance/registers_reg[9][31][0]  | rst_IBUF                                      |               19 |             32 |
+|  n_0_92_BUFG   |                                                       | rst_IBUF                                      |               13 |             32 |
+|  clk_IBUF_BUFG |                                                       | rst_IBUF                                      |               14 |             38 |
+|  clk_IBUF_BUFG | cpu_instance/if_id_instance/id_pc[31]_i_2_n_2         | cpu_instance/if_id_instance/id_pc[31]_i_1_n_2 |               16 |             42 |
+|  clk_IBUF_BUFG | cpu_instance/if_id_instance/mem_dm_wdata_reg[0]_0     | cpu_instance/if_id_instance/mem_dm_wena_reg   |               41 |             87 |
+|  clk_IBUF_BUFG | cpu_instance/if_id_instance/E[0]                      | cpu_instance/if_id_instance/SR[0]             |               56 |            133 |
++----------------+-------------------------------------------------------+-----------------------------------------------+------------------+----------------+
+
+

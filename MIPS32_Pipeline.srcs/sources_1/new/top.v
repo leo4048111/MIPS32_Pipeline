@@ -26,9 +26,9 @@ module top(
     input rst
     );
 
-wire [`i32] IM_Inst;
-wire [`i32] pc;
-wire IM_rena;
+(* DONT_TOUCH = "TRUE" *) wire [`i32] IM_Inst;
+(* DONT_TOUCH = "TRUE" *) wire [`i32] pc;
+(* DONT_TOUCH = "TRUE" *) wire IM_rena;
 
 CPU cpu_instance(
     .clk(clk),
@@ -38,7 +38,7 @@ CPU cpu_instance(
     .IM_rena(IM_rena)
     );
 
-wire [10:0] IM_Addr = (pc - 32'h00400000) >> 2;
+(* DONT_TOUCH = "TRUE" *) wire [10:0] IM_Addr = (pc - 32'h00400000) >> 2;
 
 IMEM imem_instance(
     .IM_Addr(IM_Addr),
