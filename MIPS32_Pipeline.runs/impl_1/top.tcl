@@ -49,17 +49,25 @@ set_msg_config -id {HDL 9-1654} -limit 100000
 start_step init_design
 set rc [catch {
   create_msg_db init_design.pb
+  set_param xicom.use_bs_reader 1
   set_property design_mode GateLvl [current_fileset]
   set_param project.singleFileAddWarning.threshold 0
   set_property webtalk.parent_dir D:/Projects/Vivado/MIPS32_Pipeline/MIPS32_Pipeline.cache/wt [current_project]
   set_property parent.project_path D:/Projects/Vivado/MIPS32_Pipeline/MIPS32_Pipeline.xpr [current_project]
   set_property ip_repo_paths d:/Projects/Vivado/MIPS32_Pipeline/MIPS32_Pipeline.cache/ip [current_project]
   set_property ip_output_repo d:/Projects/Vivado/MIPS32_Pipeline/MIPS32_Pipeline.cache/ip [current_project]
+  set_property XPM_LIBRARIES XPM_MEMORY [current_project]
   add_files -quiet D:/Projects/Vivado/MIPS32_Pipeline/MIPS32_Pipeline.runs/synth_1/top.dcp
   add_files -quiet d:/Projects/Vivado/MIPS32_Pipeline/MIPS32_Pipeline.srcs/sources_1/ip/dist_mem_gen_0/dist_mem_gen_0.dcp
   set_property netlist_only true [get_files d:/Projects/Vivado/MIPS32_Pipeline/MIPS32_Pipeline.srcs/sources_1/ip/dist_mem_gen_0/dist_mem_gen_0.dcp]
+  add_files -quiet d:/Projects/Vivado/MIPS32_Pipeline/MIPS32_Pipeline.srcs/sources_1/ip/ila_0/ila_0.dcp
+  set_property netlist_only true [get_files d:/Projects/Vivado/MIPS32_Pipeline/MIPS32_Pipeline.srcs/sources_1/ip/ila_0/ila_0.dcp]
   read_xdc -mode out_of_context -ref dist_mem_gen_0 -cells U0 d:/Projects/Vivado/MIPS32_Pipeline/MIPS32_Pipeline.srcs/sources_1/ip/dist_mem_gen_0/dist_mem_gen_0_ooc.xdc
   set_property processing_order EARLY [get_files d:/Projects/Vivado/MIPS32_Pipeline/MIPS32_Pipeline.srcs/sources_1/ip/dist_mem_gen_0/dist_mem_gen_0_ooc.xdc]
+  read_xdc -mode out_of_context -ref ila_0 -cells inst d:/Projects/Vivado/MIPS32_Pipeline/MIPS32_Pipeline.srcs/sources_1/ip/ila_0/ila_0_ooc.xdc
+  set_property processing_order EARLY [get_files d:/Projects/Vivado/MIPS32_Pipeline/MIPS32_Pipeline.srcs/sources_1/ip/ila_0/ila_0_ooc.xdc]
+  read_xdc -ref ila_0 -cells inst d:/Projects/Vivado/MIPS32_Pipeline/MIPS32_Pipeline.srcs/sources_1/ip/ila_0/ila_v6_1/constraints/ila.xdc
+  set_property processing_order EARLY [get_files d:/Projects/Vivado/MIPS32_Pipeline/MIPS32_Pipeline.srcs/sources_1/ip/ila_0/ila_v6_1/constraints/ila.xdc]
   read_xdc D:/Projects/Vivado/MIPS32_Pipeline/MIPS32_Pipeline.srcs/constrs_1/new/tb.xdc
   link_design -top top -part xc7a100tcsg324-1
   write_hwdef -file top.hwdef
@@ -122,5 +130,21 @@ if {$rc} {
   return -code error $RESULT
 } else {
   end_step route_design
+}
+
+start_step write_bitstream
+set rc [catch {
+  create_msg_db write_bitstream.pb
+  catch { write_mem_info -force top.mmi }
+  write_bitstream -force top.bit 
+  catch { write_sysdef -hwdef top.hwdef -bitfile top.bit -meminfo top.mmi -file top.sysdef }
+  catch {write_debug_probes -quiet -force debug_nets}
+  close_msg_db -file write_bitstream.pb
+} RESULT]
+if {$rc} {
+  step_failed write_bitstream
+  return -code error $RESULT
+} else {
+  end_step write_bitstream
 }
 

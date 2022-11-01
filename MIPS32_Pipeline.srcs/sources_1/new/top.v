@@ -40,6 +40,8 @@ CPU cpu_instance(
 
 (* DONT_TOUCH = "TRUE" *) wire [10:0] IM_Addr = (pc - 32'h00400000) >> 2;
 
+// (* DONT_TOUCH = "TRUE" *) wire [10:0] IM_Addr = pc > 32'h004000e8 ? 32'h004000ec : (pc - 32'h00400000) >> 2;
+
 IMEM imem_instance(
     .IM_Addr(IM_Addr),
     .IM_rena(IM_rena),

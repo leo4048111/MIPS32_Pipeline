@@ -231,7 +231,6 @@ always @ (*) begin
     else npc <= pc + 4;
 end
 
-
 // EX_MEM模块实例化
 wire [`i32] mem_wdata;
 wire [`i5] mem_waddr;
